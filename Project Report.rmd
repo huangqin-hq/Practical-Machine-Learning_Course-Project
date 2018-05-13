@@ -39,12 +39,11 @@ Quadratic Discriminant Analysis:\
 15699 samples\
 52 predictor\
 5 classes: 'A', 'B', 'C', 'D', 'E'\
-
-No pre-processing
-Resampling: Cross-Validated (10 fold, repeated 10 times) 
-Summary of sample sizes: 14130, 14129, 14130, 14130, 14129, 14128, ... 
-Resampling results:
-Accuracy   Kappa    
+No pre-processing\
+Resampling: Cross-Validated (10 fold, repeated 10 times)\
+Summary of sample sizes: 14130, 14129, 14130, 14130, 14129, 14128, ... \
+Resampling results:\
+Accuracy   Kappa\
 0.8932546  0.8652128
 
 ## Expected Out-of-Sample Error
@@ -62,31 +61,29 @@ confusionMatrix(data = predTrain, reference = cvTrain$classe)
 Confusion Matrix and Statistics:
 
           Reference
-Prediction    A    B    C    D    E
-         A 4137  139    0    4    0
-         B  169 2568  119   10   86
-         C   83  303 2603  331  107
-         D   67    9    9 2200   69
-         E    8   19    7   28 2624
-
-Overall Statistics:                         
-               Accuracy : 0.9002          
-                 95% CI : (0.8954, 0.9048)
-    No Information Rate : 0.2843          
-    P-Value [Acc > NIR] : < 2.2e-16                                 
-                  Kappa : 0.874           
- Mcnemar's Test P-Value : < 2.2e-16       
-
-Statistics by Class:
-                     Class: A Class: B Class: C Class: D Class: E
-Sensitivity            0.9267   0.8453   0.9507   0.8550   0.9092
-Specificity            0.9873   0.9697   0.9364   0.9883   0.9952
-Pos Pred Value         0.9666   0.8699   0.7596   0.9346   0.9769
-Neg Pred Value         0.9714   0.9631   0.9890   0.9720   0.9799
-Prevalence             0.2843   0.1935   0.1744   0.1639   0.1838
-Detection Rate         0.2635   0.1636   0.1658   0.1401   0.1671
-Detection Prevalence   0.2726   0.1880   0.2183   0.1499   0.1711
-Balanced Accuracy      0.9570   0.9075   0.9436   0.9217   0.9522
+Prediction    A    B    C    D    E\
+         A 4137  139    0    4    0\
+         B  169 2568  119   10   86\
+         C   83  303 2603  331  107\
+         D   67    9    9 2200   69\
+         E    8   19    7   28 2624\
+Overall Statistics:\                    
+               Accuracy : 0.9002\      
+                 95% CI : (0.8954, 0.9048)\
+    No Information Rate : 0.2843\    
+    P-Value [Acc > NIR] : < 2.2e-16\                         
+                  Kappa : 0.874\       
+ Mcnemar's Test P-Value : < 2.2e-16\
+Statistics by Class:\
+                     Class: A Class: B Class: C Class: D Class: E\
+Sensitivity            0.9267   0.8453   0.9507   0.8550   0.9092\
+Specificity            0.9873   0.9697   0.9364   0.9883   0.9952\
+Pos Pred Value         0.9666   0.8699   0.7596   0.9346   0.9769\
+Neg Pred Value         0.9714   0.9631   0.9890   0.9720   0.9799\
+Prevalence             0.2843   0.1935   0.1744   0.1639   0.1838\
+Detection Rate         0.2635   0.1636   0.1658   0.1401   0.1671\
+Detection Prevalence   0.2726   0.1880   0.2183   0.1499   0.1711\
+Balanced Accuracy      0.9570   0.9075   0.9436   0.9217   0.9522\
 
 ## Prediction Results on Test Dataset
 Apply the predition model to testing data set to generate predition results:
@@ -95,14 +92,13 @@ Apply the predition model to testing data set to generate predition results:
 testPrediction <- predict(modFit, newdata = testing)
 table(testing$problem_id, testPrediction)
 ```
-testPrediction 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
-             A 1 1 0 1 1 0 0 0 1  1  0  0  0  1  0  0  1  0  0  0
-             B 0 0 1 0 0 0 0 1 0  0  1  0  1  0  0  0  0  1  1  1
-             C 0 0 0 0 0 0 0 0 0  0  0  1  0  0  0  0  0  0  0  0
-             D 0 0 0 0 0 0 1 0 0  0  0  0  0  0  0  0  0  0  0  0
-             E 0 0 0 0 0 1 0 0 0  0  0  0  0  0  1  1  0  0  0  0
-
-testPrediction (problem_id 1 to 20):
+testPrediction 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20\
+             A 1 1 0 1 1 0 0 0 1  1  0  0  0  1  0  0  1  0  0  0\
+             B 0 0 1 0 0 0 0 1 0  0  1  0  1  0  0  0  0  1  1  1\
+             C 0 0 0 0 0 0 0 0 0  0  0  1  0  0  0  0  0  0  0  0\
+             D 0 0 0 0 0 0 1 0 0  0  0  0  0  0  0  0  0  0  0  0\
+             E 0 0 0 0 0 1 0 0 0  0  0  0  0  0  1  1  0  0  0  0\
+testPrediction (problem_id 1 to 20):\
 A A B A A E D B A A B C B A E E A B B B
 
 ## Summary
