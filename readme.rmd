@@ -14,7 +14,7 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 ## Prediction Feature Extraction
 In this project, the outcome of the prediction model is the classification of the way that the barbell lift is performed based on the sensor measurements. The model outcome is represented in the 'class' variable in the training set which has 5 levels including "A","B","C","D", and "E". For model feature extraction, only raw sensor measurements (accelerometer, gyroscope, and magnetometer readings) from belt, forearm, arm, and dumbell at Euler angles (roll, pitch, and yaw) are used, omitting summary statistics variables. Below keywards are used for feature extraction: "^roll", "^pitch", "^yaw", "^accel", "^gyros", "^magnet" and "^total". Using this approach, 52 predictors varaibles can be extracted from training set.
 
-```
+```{r}
 predictorIdx <- c(grep("^roll", names(training)), grep("^pitch", names(training)), grep("^yaw", names(training)), grep("^accel", names(training)), grep("^gyros", names(training)), grep("^magnet", names(training)), grep("^total", names(training)))
 ```
 
