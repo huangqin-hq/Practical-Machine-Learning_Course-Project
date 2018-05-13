@@ -11,15 +11,23 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv
 The test data are available here:
 https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
+```{r}
+library(caret)
+training <- read.csv("pml-training.csv")
+testing <- read.csv("pml-testing.csv")
+names(training)))
+```
+
 ## Prediction Feature Extraction
-In this project, the outcome of the prediction model is the classification of the way that the barbell lift is performed based on the sensor measurements. The model outcome is represented in the 'class' variable in the training set which has 5 levels including "A","B","C","D", and "E". For model feature extraction, only raw sensor measurements (accelerometer, gyroscope, and magnetometer readings) from belt, forearm, arm, and dumbell at Euler angles (roll, pitch, and yaw) are used, omitting summary statistics variables. Below keywards are used for feature extraction: "^roll", "^pitch", "^yaw", "^accel", "^gyros", "^magnet" and "^total". Using this approach, 52 predictors varaibles can be extracted from training set.
+In this project, the outcome of the prediction model is the classification of the way that the barbell lift is performed based on the sensor measurements. The model outcome is represented in the 'class' variable in the training set which has 5 levels including "A","B","C","D", and "E".\
+For model feature extraction, only raw sensor measurements (accelerometer, gyroscope, and magnetometer readings) from belt, forearm, arm, and dumbell at Euler angles (roll, pitch, and yaw) are used, omitting summary statistics variables. Below keywards are used for feature extraction: "^roll", "^pitch", "^yaw", "^accel", "^gyros", "^magnet" and "^total". Using this approach, 52 predictors varaibles can be extracted from training set.
 
 ```{r}
 predictorIdx <- c(grep("^roll", names(training)), grep("^pitch", names(training)), grep("^yaw", names(training)), grep("^accel", names(training)), grep("^gyros", names(training)), grep("^magnet", names(training)), grep("^total", names(training)))
 ```
 
-## Training Dataset and Cross-Validation
-10-fold cross-validation algorithm is used imporove the model performance. The training data set is partitioned into a cv training set(80%) and cv test set(20%).
+## Training Data Set and Cross-Validation
+10-fold cross-validation algorithm is used to imporove the model performance. The training data set is further partitioned into a cv training set(80%) which is used to train the prediction model, and a cv test set(20%) which could be used to validate the accuracy of the prediction model.
 
 ```{r}
 set.seed(123)
@@ -30,7 +38,7 @@ fitCtrl <- trainControl(method = "repeatedcv", number = 10, repeats = 10)
 ```
 
 ## Prediction Model Selection
-In view of large number of predictors and large training data set, Quadratic Discriminant Analysis is used to generate reasonalbly good accuracy within reasonalble processing time.
+In view of the large number of predictors and large training data set, Quadratic Discriminant Analysis is used to generate reasonalbly good accuracy within reasonalbly short processing time.
 
 ```{r}
 modFit <- train(classe ~ ., data = cvTrain, method = "qda", trControl = fitCtrl)
@@ -47,20 +55,18 @@ Accuracy   Kappa\
 0.8932546  0.8652128
 
 ## Expected Out-of-Sample Error
-By applying the cross-validationg training set into the model, accuracy is 90%. Thus the expected out-of-sample error is more than 10% as typically the prediction model achieves less accuracy on new data sets.
+By applying the cross-validationg training set into the model, accuracy is 90.0%. Thus, the expected out-of-sample error is more than 10.0% as typically the prediction model achieves less accuracy on new data sets.
 ```{r}
 predTrain <- predict(modFit, newdata = cvTrain)
 equalPredTrain <- (predTrain == cvTrain$classe)
 print(sum(equalPredTrain)/length(equalPredTrain))
 ```
 0.9001847
-
 ```{r}
 confusionMatrix(data = predTrain, reference = cvTrain$classe)
 ```
-Confusion Matrix and Statistics:
-
-          Reference
+Confusion Matrix and Statistics:\
+          Reference\
 Prediction    A    B    C    D    E\
          A 4137  139    0    4    0\
          B  169 2568  119   10   86\
@@ -83,7 +89,46 @@ Neg Pred Value         0.9714   0.9631   0.9890   0.9720   0.9799\
 Prevalence             0.2843   0.1935   0.1744   0.1639   0.1838\
 Detection Rate         0.2635   0.1636   0.1658   0.1401   0.1671\
 Detection Prevalence   0.2726   0.1880   0.2183   0.1499   0.1711\
-Balanced Accuracy      0.9570   0.9075   0.9436   0.9217   0.9522\
+Balanced Accuracy      0.9570   0.9075   0.9436   0.9217   0.9522
+
+Further verifying the accuracy of the prediction model using the cross-valiadtion test set, which is not used to train the model, the accuracy is 88.8% which is less than that of training set as expected.
+```{r}
+predTest <- predict(modFit, newdata = cvTest)
+equalPredTest <- (predTest == cvTest$classe)
+print(sum(equalPredTest)/length(equalPredTest))
+```
+0.8883508
+```{r}
+confusionMatrix(data = predTest, reference = cvTest$classe)
+```
+Confusion Matrix and Statistics:\
+          Reference\
+Prediction    A    B    C    D    E\
+         A 1030   44    0    1    1\
+         B   38  629   31    2   21\
+         C   23   75  642   95   34\
+         D   19    3    6  536   17\
+         E    6    8    5    9  648\
+Overall Statistics:
+                                         
+               Accuracy : 0.8884         
+                 95% CI : (0.8781, 0.898)
+    No Information Rate : 0.2845         
+    P-Value [Acc > NIR] : < 2.2e-16      
+                                         
+                  Kappa : 0.859          
+ Mcnemar's Test P-Value : < 2.2e-16      
+
+Statistics by Class:
+                     Class: A Class: B Class: C Class: D Class: E
+Sensitivity            0.9229   0.8287   0.9386   0.8336   0.8988
+Specificity            0.9836   0.9709   0.9299   0.9863   0.9913
+Pos Pred Value         0.9572   0.8724   0.7388   0.9225   0.9586
+Neg Pred Value         0.9698   0.9594   0.9862   0.9680   0.9775
+Prevalence             0.2845   0.1935   0.1744   0.1639   0.1838
+Detection Rate         0.2626   0.1603   0.1637   0.1366   0.1652
+Detection Prevalence   0.2743   0.1838   0.2215   0.1481   0.1723
+Balanced Accuracy      0.9533   0.8998   0.9343   0.9099   0.9450
 
 ## Prediction Results on Test Dataset
 Apply the predition model to testing data set to generate predition results:
@@ -102,3 +147,4 @@ testPrediction (problem_id 1 to 20):\
 A A B A A E D B A A B C B A E E A B B B
 
 ## Summary
+In this project, Quadratic Discriminant Analysis with cross-validation is used to build predicton models to classify the way that the barbell lift is performed based on the sensor measurements. Only raw sensor measurements are used as predciiton features while summary statistics of these raw measurements are omitted. The prediciton model can achieve a high classification accuracy of ~90% based on the results of cross-validation test set which is not used to train the model. The model is then applied to 20 test cases available in the test data set to predict their barbell lift behaviour.
