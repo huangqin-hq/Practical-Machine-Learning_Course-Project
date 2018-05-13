@@ -20,14 +20,12 @@ testing <- read.csv("pml-testing.csv")
 ## Prediction Feature Extraction
 In this project, the outcome of the prediction model is the classification of the way that the barbell lift is performed based on the sensor measurements. The model outcome is represented in the 'class' variable in the training set which has 5 levels including "A","B","C","D", and "E".\
 For model feature extraction, only raw sensor measurements (accelerometer, gyroscope, and magnetometer readings) from belt, forearm, arm, and dumbell at Euler angles (roll, pitch, and yaw) are used, omitting summary statistics variables. Below keywards are used for feature extraction: "^roll", "^pitch", "^yaw", "^accel", "^gyros", "^magnet" and "^total". Using this approach, 52 predictors varaibles can be extracted from training set.
-
 ```{r}
 predictorIdx <- c(grep("^roll", names(training)), grep("^pitch", names(training)), grep("^yaw", names(training)), grep("^accel", names(training)), grep("^gyros", names(training)), grep("^magnet", names(training)), grep("^total", names(training)))
 ```
 
-## Training Data Set and Cross-Validation
+## Cross-Validation
 10-fold cross-validation algorithm is used to imporove the model performance. The training data set is further partitioned into a cv training set(80%) which is used to train the prediction model, and a cv test set(20%) which could be used to validate the accuracy of the prediction model.
-
 ```{r}
 set.seed(123)
 inTrain <- createDataPartition(y = trainPredSet$classe, p = 0.8, list = FALSE)
@@ -41,16 +39,17 @@ In view of the large number of predictors and large training data set, Quadratic
 ```{r}
 modFit <- train(classe ~ ., data = cvTrain, method = "qda", trControl = fitCtrl)
 ```
-Quadratic Discriminant Analysis:\
-15699 samples\
-52 predictor\
-5 classes: 'A', 'B', 'C', 'D', 'E'\
-No pre-processing\
-Resampling: Cross-Validated (10 fold, repeated 10 times)\
-Summary of sample sizes: 14130, 14129, 14130, 14130, 14129, 14128, ... \
-Resampling results:\
-Accuracy   Kappa\
-0.8932546  0.8652128
+Quadratic Discriminant Analysis:
+
+    15699 samples
+       52 predictor
+        5 classes: 'A', 'B', 'C', 'D', 'E' 
+    No pre-processing
+    Resampling: Cross-Validated (10 fold, repeated 10 times) 
+    Summary of sample sizes: 14130, 14129, 14130, 14130, 14129, 14128, ... 
+    Resampling results:
+      Accuracy   Kappa    
+      0.8932546  0.8652128
 
 ## Expected Out-of-Sample Error
 By applying the cross-validationg training set into the model, accuracy is 90.0%. Thus, the expected out-of-sample error is more than 10.0% as typically the prediction model achieves less accuracy on new data sets.
@@ -133,8 +132,7 @@ Statistics by Class:
     Balanced Accuracy      0.9533   0.8998   0.9343   0.9099   0.9450
 
 ## Prediction Results on Test Dataset
-Apply the predition model to testing data set to generate predition results:
-
+Applying the predition model to the test data set yields the following results for the 20 test cases:
 ```{r}
 testPrediction <- predict(modFit, newdata = testing)
 table(testing$problem_id, testPrediction)
@@ -145,8 +143,8 @@ table(testing$problem_id, testPrediction)
                  C 0 0 0 0 0 0 0 0 0  0  0  1  0  0  0  0  0  0  0  0
                  D 0 0 0 0 0 0 1 0 0  0  0  0  0  0  0  0  0  0  0  0
                  E 0 0 0 0 0 1 0 0 0  0  0  0  0  0  1  1  0  0  0  0
-testPrediction (problem_id 1 to 20):
+testPrediction (problem_id 1 to 20):\
 A A B A A E D B A A B C B A E E A B B B
 
 ## Summary
-In this project, Quadratic Discriminant Analysis with cross-validation is used to build predicton models to classify the way that the barbell lift is performed based on the sensor measurements. Only raw sensor measurements are used as predciiton features while summary statistics of these raw measurements are omitted. The prediciton model can achieve a high classification accuracy of ~90% based on the results of cross-validation test set which is not used to train the model. The model is then applied to 20 test cases available in the test data set to predict their barbell lift behaviour.
+In this project, Quadratic Discriminant Analysis with cross-validation is used to build a predicton model to classify the way that the barbell lift is performed based on the sensor measurements. Only raw sensor measurements are used as prediction features while summary statistics of these raw measurements are omitted. The prediciton model can achieve a high classification accuracy of ~88.8% based on the results of cross-validation test set which is not used to train the model. The model is then applied to 20 test cases available in the test data set to predict their barbell lift behaviour as shown above.
