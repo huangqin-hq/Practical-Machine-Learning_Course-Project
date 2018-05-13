@@ -6,4 +6,4 @@ output:
     theme: united
 ---
 
-testing
+render("readme.rmd")
