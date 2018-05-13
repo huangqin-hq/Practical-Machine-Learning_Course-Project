@@ -14,44 +14,7 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 ## Prediction Feature Extraction
 In this project, the outcome of the prediction model is the classification of the way that the barbell lift is performed based on the sensor measurements. The model outcome is represented in the 'class' variable in the training set which has 5 levels including "A","B","C","D", and "E". For model feature extraction, only raw sensor measurements (accelerometer, gyroscope, and magnetometer readings) from belt, forearm, arm, and dumbell at Euler angles (roll, pitch, and yaw) are used, omitting summary statistics variables. Below keywards are used for feature extraction: "^roll", "^pitch", "^yaw", "^accel", "^gyros", "^magnet" and "^total". Using this approach, 52 predictors varaibles can be extracted from training set.
 
-<!-- -->
-  predictorIdx <- c(grep("^roll", names(training)), grep("^pitch", names(training)), grep("^yaw", names(training)), grep("^accel", names(training)), grep("^gyros", names(training)), grep("^magnet", names(training)), grep("^total", names(training)))
-
-<!-- -->
-
-    makeVector <- function(x = numeric()) {
-            m <- NULL
-            set <- function(y) {
-                    x <<- y
-                    m <<- NULL
-            }
-            get <- function() x
-            setmean <- function(mean) m <<- mean
-            getmean <- function() m
-            list(set = set, get = get,
-                 setmean = setmean,
-                 getmean = getmean)
-    }
-
-The following function calculates the mean of the special "vector"
-created with the above function. However, it first checks to see if the
-mean has already been calculated. If so, it `get`s the mean from the
-cache and skips the computation. Otherwise, it calculates the mean of
-the data and sets the value of the mean in the cache via the `setmean`
-function.
-
-    cachemean <- function(x, ...) {
-            m <- x$getmean()
-            if(!is.null(m)) {
-                    message("getting cached data")
-                    return(m)
-            }
-            data <- x$get()
-            m <- mean(data, ...)
-            x$setmean(m)
-            m
-    }
-
+`predictorIdx <- c(grep("^roll", names(training)), grep("^pitch", names(training)), grep("^yaw", names(training)), grep("^accel", names(training)), grep("^gyros", names(training)), grep("^magnet", names(training)), grep("^total", names(training)))`
 
 ## Training Dataset and Cross-Validation
 
