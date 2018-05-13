@@ -36,18 +36,16 @@ In view of large number of predictors and large training data set, Quadratic Dis
 modFit <- train(classe ~ ., data = cvTrain, method = "qda", trControl = fitCtrl)
 ```
 Quadratic Discriminant Analysis:
-
 15699 samples
-   52 predictor
-    5 classes: 'A', 'B', 'C', 'D', 'E' 
+52 predictor
+5 classes: 'A', 'B', 'C', 'D', 'E' 
 
 No pre-processing
 Resampling: Cross-Validated (10 fold, repeated 10 times) 
 Summary of sample sizes: 14130, 14129, 14130, 14130, 14129, 14128, ... 
 Resampling results:
-
-  Accuracy   Kappa    
-  0.8932546  0.8652128
+Accuracy   Kappa    
+0.8932546  0.8652128
 
 ## Expected Out-of-Sample Error
 By applying the cross-validationg training set into the model, accuracy is 90%. Thus the expected out-of-sample error is more than 10% as typically the prediction model achieves less accuracy on new data sets.
